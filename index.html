@@ -783,9 +783,6 @@ function lbShow() {
   const p = lbPhotos[lbIdx];
   document.getElementById('lb-img').src = p.full;
   document.getElementById('lb-count').textContent = `${lbIdx+1} / ${lbPhotos.length}`;
-  const dl = document.getElementById('lb-download');
-  dl.href = p.full;
-  dl.download = `photo_${lbIdx+1}.jpg`;
 }
 function lbNav(d) {
   lbIdx = (lbIdx + d + lbPhotos.length) % lbPhotos.length;
