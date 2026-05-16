@@ -380,7 +380,27 @@
     backdrop-filter: blur(6px);
   }
   .lb-btn:hover { background: rgba(255,255,255,0.18); }
-  .lb-close { top:1.2rem; right:1.2rem; font-size:1rem; }
+  .lb-download {
+    position: absolute;
+    top: 1.2rem;
+    right: 4.2rem;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,250,240,0.9);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+    backdrop-filter: blur(6px);
+    text-decoration: none;
+  }
+  .lb-download:hover { background: rgba(255,255,255,0.18); }
+  .lb-download svg {
+    width: 16px; height: 16px;
+    stroke: currentColor; fill: none;
+    stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+  }
   .lb-prev  { left:1rem;  top:50%; transform:translateY(-50%); }
   .lb-next  { right:1rem; top:50%; transform:translateY(-50%); }
   .lb-count {
@@ -621,7 +641,7 @@
         <svg class="vendor-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
       </a>
       <a href="https://www.instagram.com/emerald_illustration?igsh=MTBrcXRzbGV5cTdiaw==" target="_blank" rel="noopener" class="vendor-card"><div class="vendor-info">
-          <span class="vendor-role">設計</span>
+          <span class="vendor-role">喜帖設計</span>
           <span class="vendor-name">Emerald 袓母綠</span>
         </div>
         <svg class="vendor-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
@@ -645,7 +665,7 @@
         <svg class="vendor-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
       </a>
       <a href="https://www.instagram.com/eefang_sunlight/" target="_blank" rel="noopener" class="vendor-card"><div class="vendor-info">
-          <span class="vendor-role">婚紗攝影</span>
+          <span class="vendor-role">婚紗、登記攝影</span>
           <span class="vendor-name">一方陽光</span>
         </div>
         <svg class="vendor-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
@@ -666,6 +686,9 @@
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="lbBgClick(event)">
   <button class="lb-btn lb-close" onclick="lbClose()">✕</button>
+  <a class="lb-download" id="lb-download" href="" download target="_blank" title="下載照片">
+    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  </a>
   <button class="lb-btn lb-prev"  onclick="lbNav(-1)">‹</button>
   <img id="lb-img" src="" alt="">
   <button class="lb-btn lb-next"  onclick="lbNav(1)">›</button>
@@ -736,8 +759,12 @@ function lbOpen(i) {
   document.body.style.overflow = 'hidden';
 }
 function lbShow() {
-  document.getElementById('lb-img').src = lbPhotos[lbIdx].full;
+  const p = lbPhotos[lbIdx];
+  document.getElementById('lb-img').src = p.full;
   document.getElementById('lb-count').textContent = `${lbIdx+1} / ${lbPhotos.length}`;
+  const dl = document.getElementById('lb-download');
+  dl.href = p.full;
+  dl.download = `photo_${lbIdx+1}.jpg`;
 }
 function lbNav(d) {
   lbIdx = (lbIdx + d + lbPhotos.length) % lbPhotos.length;
