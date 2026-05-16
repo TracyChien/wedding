@@ -26,6 +26,55 @@
     overflow-x: hidden;
   }
 
+/* ── NAV ── */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 52px;
+    background: rgba(251,245,236,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(192,160,112,0.2);
+    transition: box-shadow 0.3s;
+  }
+  .nav.scrolled {
+    box-shadow: 0 2px 16px rgba(160,120,80,0.08);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--brown);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .nav-links {
+    display: flex;
+    gap: 0.3rem;
+  }
+  .nav-link {
+    padding: 0.4rem 1rem;
+    border-radius: 30px;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+  }
+  .nav-link:hover {
+    color: var(--brown);
+    background: rgba(192,160,112,0.12);
+  }
+  .nav-link.active {
+    color: var(--brown);
+    background: rgba(192,160,112,0.15);
+  }
+
   /* ── HERO ── */
   .hero {
     min-height: 100vh;
@@ -33,7 +82,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4rem 2rem 5rem;
+    padding: 6rem 2rem 5rem;
     position: relative;
     background:
       radial-gradient(ellipse 80% 60% at 10% 5%,  #f5dfc825 0%, transparent 65%),
@@ -339,6 +388,41 @@
   }
   .vendor-card:hover .vendor-arrow { stroke: var(--gold); }
 
+  /* ── TO TOP ── */
+  .to-top {
+    position: fixed;
+    bottom: 1.8rem;
+    right: 1.5rem;
+    z-index: 100;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--brown);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(160,120,80,0.3);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+  }
+  .to-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .to-top svg {
+    stroke: var(--white);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .to-top:hover { background: var(--text); }
+
   /* ── FOOTER ── */
   footer {
     text-align: center;
@@ -355,13 +439,25 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 7px;
     }
+    #grid-incard.active {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#top" class="nav-logo">Neo & Tracy</a>
+  <div class="nav-links">
+    <a href="#gallery" class="nav-link">Gallery</a>
+    <a href="#vendors" class="nav-link">Vendors</a>
+  </div>
+</nav>
+
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="top">
   <img src="invite.png" alt="Neo & Tracy 婚禮邀請" class="invite-card">
   <a href="#gallery" class="scroll-down">
     <span>PHOTOS</span>
@@ -408,7 +504,7 @@
   <div class="gallery-grid"        id="grid-dress"></div>
 </section>
 
-<section class="vendors">
+<section class="vendors" id="vendors">
   <div class="vendors-inner">
     <div class="section-head">
       <h2>Our Vendors</h2>
@@ -494,6 +590,11 @@
 <footer>
   <p>Neo &amp; Tracy <span class="heart">♥</span> 2026.04.25</p>
 </footer>
+
+<!-- TO TOP -->
+<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="lbBgClick(event)">
@@ -589,6 +690,26 @@ document.addEventListener('keydown', e => {
 });
 
 loadTab('group');
+
+// Nav scroll effect + active link
+const nav = document.getElementById('nav');
+const navLinks = document.querySelectorAll('.nav-link');
+const sections = [
+  { id: 'top',     el: document.getElementById('top') },
+  { id: 'gallery', el: document.getElementById('gallery') },
+  { id: 'vendors', el: document.getElementById('vendors') },
+];
+const toTop = document.getElementById('toTop');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+  toTop.classList.toggle('visible', window.scrollY > 400);
+  const mid = window.scrollY + window.innerHeight / 2;
+  let current = 'top';
+  sections.forEach(s => { if (s.el && s.el.offsetTop <= mid) current = s.id; });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
 </script>
 </body>
 </html>
