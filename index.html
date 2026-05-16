@@ -379,28 +379,33 @@
   </div>
 
   <div class="tabs" role="tablist">
-    <button class="tab-btn active" data-tab="wedding" onclick="switchTab(this)">
-      <svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-      婚禮攝影
-    </button>
-    <button class="tab-btn" data-tab="dress" onclick="switchTab(this)">
-      <svg viewBox="0 0 24 24"><path d="M12 2c-1.5 2-4 3-4 7h8c0-4-2.5-5-4-7z"/><path d="M8 9l-3 13h14L16 9"/></svg>
-      婚紗照
-    </button>
-    <button class="tab-btn" data-tab="group" onclick="switchTab(this)">
+    <button class="tab-btn active" data-tab="group" onclick="switchTab(this)">
       <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       合照
+    </button>
+    <button class="tab-btn" data-tab="ceremony" onclick="switchTab(this)">
+      <svg viewBox="0 0 24 24"><path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z"/></svg>
+      儀式
+    </button>
+    <button class="tab-btn" data-tab="wedding" onclick="switchTab(this)">
+      <svg viewBox="0 0 24 24"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+      婚宴
     </button>
     <button class="tab-btn" data-tab="incard" onclick="switchTab(this)">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
       印卡讚
     </button>
+    <button class="tab-btn" data-tab="dress" onclick="switchTab(this)">
+      <svg viewBox="0 0 24 24"><path d="M12 2c-1.5 2-4 3-4 7h8c0-4-2.5-5-4-7z"/><path d="M8 9l-3 13h14L16 9"/></svg>
+      婚紗照
+    </button>
   </div>
 
-  <div class="gallery-grid active" id="grid-wedding"></div>
-  <div class="gallery-grid"        id="grid-dress"></div>
-  <div class="gallery-grid"        id="grid-group"></div>
+  <div class="gallery-grid active" id="grid-group"></div>
+  <div class="gallery-grid"        id="grid-ceremony"></div>
+  <div class="gallery-grid"        id="grid-wedding"></div>
   <div class="gallery-grid"        id="grid-incard"></div>
+  <div class="gallery-grid"        id="grid-dress"></div>
 </section>
 
 <section class="vendors">
@@ -503,6 +508,8 @@
 // ── 把這裡換成你的 Apps Script 網址 ──
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhPiJLEycrItGmmbHvU_9Gw4GoH66IehvEyA1VzKmr1rWMpnxWQVe7b-tZjCQar8gX6w/exec';
 
+
+
 const cache = {};
 let lbPhotos = [], lbIdx = 0;
 
@@ -581,7 +588,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft')   lbNav(-1);
 });
 
-loadTab('wedding');
+loadTab('group');
 </script>
 </body>
 </html>
