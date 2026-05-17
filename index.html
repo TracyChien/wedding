@@ -413,6 +413,34 @@
     letter-spacing: 0.12em;
   }
 
+  /* ── VIDEO ── */
+  .video-section {
+    padding: 5rem 1.25rem;
+    background: var(--warm);
+    border-top: 1px solid rgba(192,160,112,0.2);
+  }
+  .video-inner {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .video-wrap {
+    margin-top: 2.5rem;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 16/9;
+    box-shadow: 0 8px 40px rgba(160,120,80,0.15);
+    border: 1px solid rgba(192,160,112,0.25);
+  }
+  .video-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
   /* ── VENDORS ── */
   .vendors {
     background: var(--cream);
@@ -552,6 +580,7 @@
   <a href="#top" class="nav-logo">Neo & Tracy</a>
   <div class="nav-links">
     <a href="#gallery" class="nav-link">Gallery</a>
+    <a href="#video" class="nav-link">Film</a>
     <a href="#vendors" class="nav-link">Vendors</a>
   </div>
 </nav>
@@ -608,6 +637,24 @@
   <div class="gallery-grid"        id="grid-incard"></div>
   <div class="gallery-grid"        id="grid-dress"></div>
   <div class="gallery-grid"        id="grid-registry"></div>
+</section>
+
+<!-- VIDEO -->
+<section class="video-section" id="video">
+  <div class="video-inner">
+    <div class="section-head">
+      <h2>Our Story</h2>
+      <div class="gold-line">✦</div>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/dqmfFy9OSMI?si=rJNmcNG34hYxl8lI"
+        title="Neo & Tracy Wedding Film"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen></iframe>
+    </div>
+  </div>
 </section>
 
 <section class="vendors" id="vendors">
@@ -677,6 +724,23 @@
         </div>
         <svg class="vendor-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
       </a>
+      <a href="https://www.instagram.com/follow_your_heart_photography_?igsh=MWtidnYwZjIybjJ4dw==" target="_blank" rel="noopener" class="vendor-card"><div class="vendor-info">
+          <span class="vendor-role">影片攝影</span>
+          <span class="vendor-name">心之所像</span>
+        </div>
+        <svg class="vendor-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+      </a>
+      <div class="vendor-card"><div class="vendor-info">
+          <span class="vendor-role">影片助理</span>
+          <span class="vendor-name">liaojessie</span>
+        </div>
+      </div>
+      <a href="https://www.instagram.com/media_girl10?igsh=MTQ1eGp2eGpxYmx5Yw==" target="_blank" rel="noopener" class="vendor-card"><div class="vendor-info">
+          <span class="vendor-role">影片導演、剪輯</span>
+          <span class="vendor-name">影女子</span>
+        </div>
+        <svg class="vendor-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+      </a>
     </div>
   </div>
 </section>
@@ -708,6 +772,18 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhPiJLEycrItGmmbHvU
 const cache = {};
 let lbPhotos = [], lbIdx = 0;
 
+function retryImg(img) {
+  const retries = parseInt(img.dataset.retries || '0');
+  if (retries < 3) {
+    img.dataset.retries = retries + 1;
+    setTimeout(() => {
+      img.src = img.dataset.src + '&t=' + Date.now();
+    }, 1500 * (retries + 1));
+  } else {
+    img.closest('.photo-card').style.opacity = '0.3';
+  }
+}
+
 function thumb(id) { return `https://drive.google.com/thumbnail?id=${id}&sz=w600`; }
 function full(id)  { return `https://drive.google.com/thumbnail?id=${id}&sz=w2000`; }
 
@@ -727,7 +803,8 @@ function renderCards(grid, ids) {
   grid.innerHTML = photos.map((p, i) => `
     <div class="photo-card${isIncard ? ' photo-card--portrait' : ''}" onclick="lbOpen(${i})">
       <img src="${p.thumb}" alt="photo ${i+1}" loading="lazy"
-           onerror="this.closest('.photo-card').style.display='none'">
+           data-src="${p.thumb}"
+           onerror="retryImg(this)">
       <div class="hover-overlay"><span>${i+1} / ${photos.length}</span></div>
     </div>`).join('');
 }
@@ -824,6 +901,7 @@ const navLinks = document.querySelectorAll('.nav-link');
 const sections = [
   { id: 'top',     el: document.getElementById('top') },
   { id: 'gallery', el: document.getElementById('gallery') },
+  { id: 'video',   el: document.getElementById('video') },
   { id: 'vendors', el: document.getElementById('vendors') },
 ];
 const toTop = document.getElementById('toTop');
